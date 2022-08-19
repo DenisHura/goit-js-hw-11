@@ -50,11 +50,10 @@ async function getPictures(e) {
     
     incertCardContent(response.hits);
     lightbox.refresh();
-    onSmoothScroll();
   
     currentHits += response.hits.length;
 
-    // Раскомментировать, чтобы появилась кнопка "Load more" (см. 158 строку)
+    // Раскомментировать, чтобы появилась кнопка "Load more" (см. 156 строку)
 
     // if (currentHits < response.totalHits) {
     //   loadMoreBtn.classList.remove('is-hidden');
