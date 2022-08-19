@@ -49,19 +49,10 @@ async function getPictures(e) {
     
     incertCardContent(response.hits);
     lightbox.refresh();
-    
+    onSmoothScroll();
   
     currentHits += response.hits.length;
 
-    const { height: cardHeight } = document
-      .querySelector(".gallery")
-      .firstElementChild.getBoundingClientRect();
-
-    window.scrollBy({
-      top: cardHeight * 2,
-      behavior: "smooth",
-    });
-   
     if (currentHits < response.totalHits) {
       loadMoreBtn.classList.remove('is-hidden');
     }
@@ -132,7 +123,8 @@ async function onLoadMore() {
         
   incertCardContent(response.hits);
   lightbox.refresh();
-  
+  onSmoothScroll();
+
   if (currentHits >= response.totalHits) {
     loadMoreBtn.classList.add('is-hidden');
     endCollectionEl.classList.remove('is-hidden');
@@ -151,3 +143,13 @@ function onInfoMessage(message) {
   Notiflix.Notify.info(message)
 }
 
+function onSmoothScroll() {
+  const { height: cardHeight } = document
+      .querySelector(".gallery")
+      .firstElementChild.getBoundingClientRect();
+
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: "smooth",
+    });
+}
