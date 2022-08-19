@@ -2,6 +2,7 @@ import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import Notiflix from 'notiflix';
 import { fetchPictures } from "./js/fetch-pictures"
+import throttle from "lodash.throttle";
 
 const formEl = document.querySelector('#search-form');
 const inputEl = document.querySelector('input');
@@ -53,10 +54,11 @@ async function getPictures(e) {
   
     currentHits += response.hits.length;
 
-    if (currentHits < response.totalHits) {
-      loadMoreBtn.classList.remove('is-hidden');
-    }
-       
+    // Раскомментировать, чтобы появилась кнопка "Load more" (см. 158 строку)
+
+    // if (currentHits < response.totalHits) {
+    //   loadMoreBtn.classList.remove('is-hidden');
+    // }
     
   } catch (error) {
         console.error(error);
@@ -87,8 +89,6 @@ function createCardMarkup({ webformatURL, largeImageURL, tags, likes, views, com
 </div>`;
   
 }
-
-
 
 function generatePictureCard(array) {
 return array.reduce((acc, item) => acc + createCardMarkup(item), "");
@@ -153,3 +153,20 @@ function onSmoothScroll() {
       behavior: "smooth",
     });
 }
+
+// Закоментировать 160 строку, чтобы бесконечный скролл стал не активный (см. 56 строку)
+
+window.addEventListener('scroll', throttle(onInfinityScroll, 500))
+  
+async function onInfinityScroll() {
+  
+  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
+    currentPage += 1;
+    const response = await fetchPictures(inputQuery, currentPage);
+    currentHits += response.hits.length;
+    
+    incertCardContent(response.hits);
+    lightbox.refresh();
+    onSmoothScroll();
+    }
+  }
